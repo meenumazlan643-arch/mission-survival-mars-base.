@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100f27">
+<title>Mission Survival: Mars Base</title>
+<style>
+:root{--bg:#100f27;--panel:#1c1b3a;--panel2:#252447;--text:#f6f4ff;--muted:#b8b7d8;--cyan:#65e6e0;--orange:#ff9c69;--pink:#ff6f91;--green:#91efad;--yellow:#ffd86e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#3a2048 0,#100f27 44%,#0b1023 100%);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:960px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:900;letter-spacing:.08em;font-size:.78rem;color:var(--cyan)}.pill{border:1px solid #ffffff25;border-radius:999px;padding:6px 11px;color:var(--muted);font-size:.8rem}
+.hero{margin:18px 0 14px;padding:22px;border:1px solid #ffffff20;border-radius:24px;background:linear-gradient(130deg,#29254d,#1a1c3b 60%,#472c42);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-32px;top:-28px;background:radial-gradient(circle at 30% 25%,#ffc2a2,#e66b62 45%,#9b3c63 75%);opacity:.9;box-shadow:0 0 55px #e66b6255}
+.hero h1{font-size:clamp(2rem,7vw,3.5rem);line-height:1.02;margin:12px 0;max-width:570px;position:relative;z-index:1}.hero p{max-width:520px;color:#dad8f2;position:relative;z-index:1}.hero .mini{font-size:.76rem;color:var(--cyan);font-weight:800;letter-spacing:.12em}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.stat,.card{background:#1c1b3aeb;border:1px solid #ffffff18;border-radius:17px;padding:14px}.stat-top{display:flex;justify-content:space-between;gap:4px;font-size:.82rem;color:var(--muted)}.num{font-size:1.45rem;font-weight:850;margin:5px 0}.bar{height:7px;background:#ffffff17;border-radius:99px;overflow:hidden}.fill{height:100%;width:70%;border-radius:99px;transition:width .25s}.oxygen{background:var(--cyan)}.water{background:#71aaff}.food{background:var(--yellow)}.power{background:var(--green)}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.card h2{font-size:1.1rem;margin:0 0 9px}.muted{color:var(--muted)}.day{font-size:.85rem;color:var(--cyan);font-weight:800;letter-spacing:.08em}.event{padding:14px;border-radius:14px;background:#11132c;border:1px solid #ffffff15;margin:12px 0}.event strong{display:block;margin-bottom:5px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.action{border:1px solid #ffffff20;background:var(--panel2);color:var(--text);border-radius:13px;padding:12px;text-align:left;min-height:85px;cursor:pointer;font:inherit}.action b{display:block;font-size:.95rem}.action small{display:block;color:var(--muted);margin-top:4px;font-size:.78rem}.action:active{transform:scale(.98)}button:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}.action:disabled{opacity:.4;cursor:not-allowed}.primary{background:var(--cyan);color:#10202c;border:0;border-radius:13px;padding:12px 16px;font-weight:850;cursor:pointer;font:inherit}.secondary{background:transparent;border:1px solid #ffffff30;color:var(--text);border-radius:12px;padding:10px 13px;font:inherit;cursor:pointer}.log{display:grid;gap:8px;max-height:260px;overflow:auto}.logitem{padding:9px 11px;border-left:3px solid var(--cyan);background:#11132c;border-radius:0 10px 10px 0;color:#d8d7ef;font-size:.88rem}.footer{color:#9d9cbd;text-align:center;font-size:.78rem;padding:20px 6px}.overlay{position:fixed;inset:0;background:#09091bd9;display:flex;align-items:center;justify-content:center;padding:18px;z-index:5}.modal{max-width:480px;width:100%;padding:24px;border-radius:22px;background:#211f42;border:1px solid #ffffff25}.modal h2{font-size:1.7rem;margin:0 0 8px}.hidden{display:none!important}.tag{display:inline-block;background:#ffffff13;color:var(--cyan);padding:4px 8px;border-radius:7px;font-size:.76rem;font-weight:800}
+@media(max-width:650px){.wrap{padding:12px}.hero{padding:18px}.hero:after{width:110px;height:110px;right:-25px;top:-12px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.grid{grid-template-columns:1fr}.stat{padding:12px}.num{font-size:1.3rem}.actions{grid-template-columns:1fr 1fr}.action{padding:10px;min-height:92px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><div><div class="brand">✦ INDEPENDENT STUDENT GAME PROJECT</div><div style="font-weight:800">MISSION CONTROL</div></div><div class="pill">SIMULATION • v1.0</div></header>
+  <section class="hero">
+    <div class="mini">MISSION SURVIVAL / MARS BASE</div>
+    <h1>Keep the crew<br>alive on Mars.</h1>
+    <p>You are mission commander. Manage limited supplies, respond to emergencies and survive 10 Martian mission days. Every decision has a cost.</p>
+    <span class="tag">TRAINING SIMULATION</span>
+  </section>
+  <section class="stats" aria-label="Mission resources">
+    <div class="stat"><div class="stat-top"><span>🫁 OXYGEN</span><span id="oPct">80%</span></div><div class="num" id="oxygenNum">80</div><div class="bar"><div class="fill oxygen" id="oxygenBar"></div></div></div>
+    <div class="stat"><div class="stat-top"><span>💧 WATER</span><span id="wPct">75%</span></div><div class="num" id="waterNum">75</div><div class="bar"><div class="fill water" id="waterBar"></div></div></div>
+    <div class="stat"><div class="stat-top"><span>🥫 FOOD</span><span id="fPct">70%</span></div><div class="num" id="foodNum">70</div><div class="bar"><div class="fill food" id="foodBar"></div></div></div>
+    <div class="stat"><div class="stat-top"><span>⚡ POWER</span><span id="pPct">65%</span></div><div class="num" id="powerNum">65</div><div class="bar"><div class="fill power" id="powerBar"></div></div></div>
+  </section>
+  <div class="grid">
+    <section class="card">
+      <div class="day" id="dayLabel">MISSION DAY 01 / 10</div>
+      <h2 id="statusTitle" style="margin-top:5px">The crew is counting on you.</h2>
+      <p class="muted" id="statusText">Your base is stable for now. Choose one action for today, then advance the mission.</p>
+      <div class="event" aria-live="polite"><strong id="eventTitle">📡 First transmission</strong><span id="eventText" class="muted">Systems are online. Monitor supplies and make careful choices.</span></div>
+      <h2>Choose today's action</h2>
+      <div class="actions">
+        <button class="action" data-action="recycle"><b>♻️ Recycle water</b><small>Save water; uses power.</small></button>
+        <button class="action" data-action="farm"><b>🌱 Grow food</b><small>Increase food; uses water and power.</small></button>
+        <button class="action" data-action="solar"><b>☀️ Maintain solar</b><small>Restore power reserves.</small></button>
+        <button class="action" data-action="shield"><b>🛡️ Check shielding</b><small>Improve protection readiness.</small></button>
+        <button class="action" data-action="oxygen"><b>🫁 Tune oxygen system</b><small>Restore oxygen; uses power.</small></button>
+        <button class="action" data-action="rest"><b>🧑‍🚀 Crew rest</b><small>Conserve power and steady morale.</small></button>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:13px"><button class="primary" id="advanceBtn">Advance one day →</button><button class="secondary" id="restartBtn">Restart mission</button></div>
+    </section>
+    <aside style="display:grid;gap:14px;align-content:start">
+      <section class="card"><h2>Mission objective</h2><p class="muted" style="margin-top:0">Survive through Day 10 with oxygen, water, food and power all above zero.</p><div style="display:flex;justify-content:space-between;align-items:center"><span class="muted">Days survived</span><strong id="daysSurvived">0 / 10</strong></div><div class="bar" style="margin-top:8px"><div class="fill oxygen" id="dayBar" style="width:0%"></div></div><p class="muted" style="font-size:.8rem;margin-bottom:0">Educational game values are simplified for gameplay and are not real mission-planning measurements.</p></section>
+      <section class="card"><h2>Mission log</h2><div class="log" id="log" aria-live="polite"><div class="logitem">Mission initialized. Crew systems are online.</div></div></section>
+      <section class="card"><h2>About this simulation</h2><p class="muted" style="margin:0">This student-built concept demonstrates resource trade-offs, decision-making and emergency response for a hypothetical Mars habitat. It is not an operational NASA tool.</p></section>
+    </aside>
+  </div>
+  <div class="footer">MISSION SURVIVAL • A browser-based educational prototype • Not affiliated with or endorsed by NASA</div>
+</div>
+<div class="overlay" id="overlay"><div class="modal"><div class="mini">MISSION CONTROL // BRIEFING</div><h2>Welcome, Commander.</h2><p class="muted">Your crew has landed on Mars. Keep oxygen, water, food and power above zero for 10 days. Each day, choose one maintenance action, then advance time. Watch your resources: survival depends on balance.</p><p class="muted" style="font-size:.85rem">Tip: solar maintenance restores energy; water recycling and oxygen tuning use energy. Some days bring random events.</p><button class="primary" id="startBtn" style="width:100%">Begin mission 🚀</button></div></div>
+<script>
+(()=> {
+ const initial={oxygen:80,water:75,food:70,power:65,shield:35,day:1,action:null,ended:false,started:false};
+ let s={...initial}; const $=id=>document.getElementById(id);
+ const clamp=n=>Math.max(0,Math.min(100,Math.round(n)));
+ const names={oxygen:"Oxygen",water:"Water",food:"Food",power:"Power"};
+ const events=[
+  {title:"🌪️ Dust storm",text:"Dust is reducing solar collection. Power drops by 12.",apply:()=>{s.power-=12;}},
+  {title:"🔧 Routine system check",text:"The crew finds a small leak and fixes it. Oxygen drops by 4.",apply:()=>{s.oxygen-=4;}},
+  {title:"🌿 Greenhouse success",text:"The plants are thriving. Food reserves increase by 8.",apply:()=>{s.food+=8;}},
+  {title:"☀️ Clear skies",text:"Solar panels collect extra energy. Power increases by 10.",apply:()=>{s.power+=10;}},
+  {title:"☢️ Radiation alert",text:"A radiation alert is detected. Shield readiness is important.",apply:()=>{s.shield-=8;}},
+  {title:"💧 Water recovery",text:"The recovery system performs well. Water increases by 6.",apply:()=>{s.water+=6;}}
+ ];
+ function log(msg){const el=document.createElement("div");el.className="logitem";el.textContent=msg;$("log").prepend(el);while($("log").children.length>8)$("log").lastChild.remove();}
+ function render(){
+  ["oxygen","water","food","power"].forEach(k=>{s[k]=clamp(s[k]);$(k+"Num").textContent=s[k];$(""+k+"Pct").textContent=s[k]+"%";$(k+"Bar").style.width=s[k]+"%";});
+  $("dayLabel").textContent=s.ended?(s.day>10?"MISSION COMPLETE":"MISSION ENDED"):`MISSION DAY ${String(s.day).padStart(2,"0")} / 10`;
+  $("daysSurvived").textContent=Math.min(s.day-1,10)+" / 10";$("dayBar").style.width=(Math.min(s.day-1,10)*10)+"%";
+  document.querySelectorAll("[data-action]").forEach(b=>b.disabled=s.ended||!s.started||!!s.action);
+  $("advanceBtn").disabled=s.ended||!s.started||!s.action;
+  if(s.ended){$("statusTitle").textContent=s.day>10?"Mission accomplished! 🎉":"Mission compromised."; $("statusText").textContent=s.day>10?"The crew survived all 10 mission days. Review the log and try a harder strategy.":"A critical resource reached zero. Restart and try a different plan."; $("advanceBtn").textContent="Mission ended";}
+ }
+ function endCheck(){if(["oxygen","water","food","power"].some(k=>s[k]<=0)){s.ended=true;log("Critical resource depleted. Mission ended.");return true;}return false;}
+ function doAction(a){
+  if(s.ended||s.action||!s.started)return;
+  const before={...s};let message="";
+  switch(a){
+   case "recycle": if(s.power<8){message="Not enough power to run water recovery.";break;} s.water+=13;s.power-=8;message="Water recycling recovered 13 units and used 8 power.";break;
+   case "farm": if(s.water<10||s.power<8){message="The greenhouse needs at least 10 water and 8 power.";break;}s.food+=16;s.water-=10;s.power-=8;message="Greenhouse harvest added 16 food, using water and power.";break;
+   case "solar": s.power+=20;s.food-=2;message="Solar panels restored 20 power. Crew time cost 2 food.";break;
+   case "shield": if(s.power<6){message="Not enough power for a shielding systems check.";break;}s.shield=Math.min(100,s.shield+18);s.power-=6;message="Shield readiness improved. This is a simplified game mechanic.";break;
+   case "oxygen": if(s.power<10){message="Not enough power to tune the oxygen system.";break;}s.oxygen+=17;s.power-=10;message="Oxygen system tuned: +17 oxygen, -10 power.";break;
+   case "rest": s.power+=5;s.oxygen-=2;s.water-=2;s.food-=3;message="Crew rested and systems conserved some power; daily supplies were consumed.";break;
+  }
+  if(message.startsWith("Not enough")||message.startsWith("The greenhouse")){ $("eventTitle").textContent="⚠️ Action unavailable";$("eventText").textContent=message;return;}
+  ["oxygen","water","food","power"].forEach(k=>s[k]=clamp(s[k]));s.action=a;log(message);$("eventTitle").textContent="✅ Action completed";$("eventText").textContent=message;$("statusTitle").textContent="Decision recorded."; $("statusText").textContent="Advance the day to consume supplies and see what happens next.";render();
+ }
+ function advance(){
+  if(s.ended||!s.action||!s.started)return;
+  s.oxygen-=6;s.water-=6;s.food-=7;s.power-=4;
+  if(Math.random()<.65){const ev=events[Math.floor(Math.random()*events.length)];ev.apply();$("eventTitle").textContent=ev.title;$("eventText").textContent=ev.text;log("Day "+s.day+": "+ev.title+" — "+ev.text);}
+  ["oxygen","water","food","power"].forEach(k=>s[k]=clamp(s[k]));
+  if(endCheck()){render();return;}
+  s.day++;s.action=null;
+  if(s.day>10){s.ended=true;log("All 10 mission days survived. Mission success!");$("eventTitle").textContent="🏆 Mission successful";$("eventText").textContent="You kept every critical resource above zero for the full mission.";render();return;}
+  $("statusTitle").textContent="A new day begins."; $("statusText").textContent="Supplies were consumed overnight. Choose a new action.";log("Day "+(s.day-1)+" complete. Resource consumption applied.");render();
+ }
+ function restart(){s={...initial};$("log").innerHTML="";log("Mission initialized. Crew systems are online.");$("eventTitle").textContent="📡 First transmission";$("eventText").textContent="Systems are online. Monitor supplies and make careful choices.";$("statusTitle").textContent="The crew is counting on you.";$("statusText").textContent="Your base is stable for now. Choose one action for today, then advance the mission.";$("advanceBtn").textContent="Advance one day →";$("overlay").classList.remove("hidden");render();}
+ document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>doAction(b.dataset.action)));
+ $("advanceBtn").addEventListener("click",advance);$("restartBtn").addEventListener("click",restart);
+ $("startBtn").addEventListener("click",()=>{s.started=true;$("overlay").classList.add("hidden");log("Commander confirmed. Mission Day 1 begins.");render();});
+ render();
+})();
+</script>
+</body>
+</html>
